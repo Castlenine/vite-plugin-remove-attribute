@@ -1,0 +1,4 @@
+{
+  "*.{ts,js,mjs,cjs}": ["pnpm lint:staged:fix", "pnpm format:staged"],
+  "*.{json,jsonc,yaml,yml,md}": ["pnpm format:staged"]
+}

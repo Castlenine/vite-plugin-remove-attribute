@@ -1,44 +1,53 @@
 {
-	"compilerOptions": {
-		"strict": true,
-		"moduleResolution": "Node",
-		"module": "ESNext",
-		"lib": [
-			"DOM",
-			"DOM.Iterable",
-			"ESNext"
-		],
-		"target": "ES2017", // Opting for ES2017 is a prudent decision
-		"allowJs": true, // Allow JavaScript files to be compiled
-		"checkJs": true, // Check JavaScript files
-		"declaration": true, // Generates corresponding .d.ts files
-		"declarationMap": true, // Generates a source map for each corresponding declaration file
-		"esModuleInterop": true, // Helps mend a few of the fences between CommonJS and ES Modules.
-		"forceConsistentCasingInFileNames": true, // Ensures that the casing of file names is consistent
-		"isolatedModules": true, // Prevents a few TS features which are unsafe when treating modules as isolated files.
-		"moduleDetection": "force", // Forces TypeScript to consider all files as modules. This helps to avoid 'cannot redeclare block-scoped variable' errors.
-		"noImplicitAny": true, // Raise error on expressions and declarations with an implied 'any' type
-		"noImplicitThis": true, // Raise error on 'this' expressions with an implied 'any' type
-		"noUnusedLocals": true, // Report errors on unused locals
-		"noUnusedParameters": true, // Report errors on unused parameters
-		"resolveJsonModule": true, // Allows importing modules with a .json extension
-		"skipLibCheck": true, // Skips checking the types of .d.ts files. This is important for performance, because otherwise all node_modules will be checked
-		"sourceMap": true, // enable source maps by default
-		"strictFunctionTypes": true, // Enable strict checking of function types
-		"strictNullChecks": true, // Enable strict null checks
-		"strictPropertyInitialization": true, // Enable strict checking of property initialization in classes
-		"verbatimModuleSyntax": true, // Forces you to use import type and export type
-		"outDir": "./dist", // Redirect output structure to the directory
-	},
-	"include": [
-		"src/**/*.d.ts",
-		"src/**/*.ts",
-		"src/**/*.js",
-	],
-	"exclude": [
-		"*.backup",
-		"*.cjs",
-		"dist",
-		"node_modules",
-	]
+  "compilerOptions": {
+    "strict": true /* Turn on the full set of strict type-checking options */,
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "moduleDetection": "force" /* Treat every file as a module, so two root scripts declaring the same top-level name never collide with "cannot redeclare block-scoped variable" */,
+    "lib": ["ESNext"] /* The plugin runs inside the Vite (Node) process; no DOM types are needed */,
+    "target": "ES2022" /* Matches `build.target` in vite.config.ts; ES2022 is the newest target Node 18 (engines.node) runs natively */,
+    "allowImportingTsExtensions": true /* Allow `.ts` import specifiers, required by Vite's native config loader (Node strips types and resolves the literal path). Safe because `noEmit` is on */,
+    "allowJs": true /* Permit importing JavaScript files alongside TypeScript */,
+    "checkJs": true /* Type-check the JavaScript files that are included in the project */,
+    "esModuleInterop": true /* Improve interop with CommonJS modules */,
+    "forceConsistentCasingInFileNames": true /* Require consistent casing across all file name references */,
+    "isolatedModules": true /* Guarantee that every file can be transpiled on its own */,
+    "noImplicitAny": true /* Flag any expression or declaration whose type is implicitly `any` */,
+    "noImplicitThis": true /* Flag any `this` expression whose type is implicitly `any` */,
+    "noUncheckedIndexedAccess": true /* Add `undefined` to the type of every index access, so an out-of-range element or a missing key must be narrowed before it is read */,
+    "noUnusedLocals": true /* Flag local variables that are declared but never read */,
+    "noUnusedParameters": true /* Flag function parameters that are declared but never read */,
+    "noEmit": true /* Type-check only. The library bundle is emitted by Vite and the declaration files by vite-plugin-dts (see vite.config.ts) */,
+    "resolveJsonModule": true /* Allow importing `.json` files as modules */,
+    "skipLibCheck": true /* Skip full type-checking of `.d.ts` files and only check the code actually referenced by the project */,
+    "sourceMap": true /* Emit a matching `.map` file next to each compiled output */,
+    "strictFunctionTypes": true /* Apply strict checking to function parameter and return types */,
+    "strictNullChecks": true /* Treat `null` and `undefined` as distinct types so they cannot silently stand in for real values */,
+    "strictPropertyInitialization": true /* Flag class properties that are declared but never assigned in the constructor */,
+    "verbatimModuleSyntax": true /* Require explicit `import type` and `export type` for type-only bindings */,
+    "types": ["node", "vitest/globals"] /* `vitest/globals` backs `test.globals: true` in vite.config.ts */
+  },
+  "include": [
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.d.ts",
+    "./*.test.ts",
+    "./.commitlintrc.ts",
+    "./eslint.config.ts",
+    "./vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "test-results-vitest",
+    "*.backup",
+    "*.backup.*",
+    "*.bak",
+    "*.bak.*",
+    "*.local",
+    "*.local-backup",
+    "*.local-backup.*",
+    "*.local.*"
+  ]
 }

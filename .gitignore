@@ -1,16 +1,43 @@
-.DS_Store
+# Node modules
+node_modules/
+
+# Build output
+/dist/
+
+# Vite
+/vite.config.js.timestamp-*
+/vite.config.ts.timestamp-*
+
+# Test results & coverage
+/coverage/
+/test-results-vitest/
+/.vitest-attachments/
+/.vitest/
 
 # Logs
-logs
+*-debug.log
 *.log
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
+*.log-*
+*.log.*
+*.logs
+/logs/
 
-# Specific folders
-node_modules
-dist
-
-# Local and backup files
-*.local.*
+# Backup & local files
+*.backup
 *.backup.*
+*.bak
+*.bak.*
+*.local
+*.local.*
+*.local-backup
+*.local-backup.*
+/local-files/
 
+# OS generated files
+# MacOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# PNPM store
+/.pnpm-store/
