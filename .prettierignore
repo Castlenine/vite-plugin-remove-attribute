@@ -1,14 +1,80 @@
-.DS_Store
-dist
-node_modules
+# Node modules
+node_modules/
 
-# Specific file(s) to ignore
-*.md
-package.json
-tsconfig.json
+# Build output
+/dist/
 
-# Ignore local backup
+# Vite
+/vite.config.js.timestamp-*
+/vite.config.ts.timestamp-*
+
+# Test results & coverage
+/coverage/
+/test-results-vitest/
+/.vitest-attachments/
+/.vitest/
+
+# Logs
+*-debug.log
+*.log
+*.log-*
+*.log.*
+*.logs
+/logs/
+
+# Backup & local files
+*.backup
 *.backup.*
+*.bak
+*.bak.*
+*.local
+*.local.*
+*.local-backup
+*.local-backup.*
+/local-files/
 
-# Ignore files for NPM
-package-lock.json
+# OS generated files
+# MacOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# Lock files (pnpm lockfile stays committed but unformatted)
+/pnpm-lock.yaml
+
+# PNPM store
+/.pnpm-store/
+
+# Not parsable files
+.czrc
+.gitignore
+.nvmrc
+.prettierignore
+
+# Binary/archive types
+*.7z
+*.gz
+*.rar
+*.tar
+*.tgz
+*.wasm
+*.zip
+
+# Documents
+*.conf
+*.doc
+*.docx
+*.fig
+*.pdf
+*.txt
+
+# Images/media
+*.gif
+*.ico
+*.jpeg
+*.jpg
+*.png
+*.webp
+
+# License
+LICENSE

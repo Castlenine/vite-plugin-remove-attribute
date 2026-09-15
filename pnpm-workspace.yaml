@@ -1,0 +1,14 @@
+# Auto-download the pnpm version declared in package.json#packageManager when mismatched (pnpm 11 default).
+pmOnFail: download
+# Fail installs when Node or dependency engines are incompatible with the current runtime.
+engineStrict: true
+# Never auto-install before `pnpm run` — the implicit install is destructive in non-TTY
+# consumers (CI, git hooks, scripts): it can abort mid-purge and leave node_modules gutted.
+verifyDepsBeforeRun: false
+# This setting acts as a security precaution by postponing the installation of newly published package versions. Delaying installations helps reduce the risk of compromised packages,
+# as most malicious releases are typically identified and removed from the registry within an hour.
+# minimumReleaseAge: 2880 # 2 days (1 day by default) (temporary commented out to allow for immediate updates)
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  unrs-resolver: true

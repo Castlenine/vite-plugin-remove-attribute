@@ -1,10 +1,25 @@
 arrowParens: always
+bracketSameLine: true
 bracketSpacing: true
-endOfLine: auto
-jsxSingleQuote: true
-printWidth: 160
+embeddedLanguageFormatting: auto
+endOfLine: lf
+insertPragma: false
+printWidth: 120
+proseWrap: always
+quoteProps: as-needed
+requirePragma: false
 semi: true
+singleAttributePerLine: false
 singleQuote: true
-tabWidth: 2
 trailingComma: all
+tabWidth: 2
 useTabs: true
+
+overrides:
+  - files:
+      - '**/package.json'
+      - '*.json'
+      - '*.jsonc'
+    options:
+      tabWidth: 2
+      useTabs: false
