@@ -76,5 +76,10 @@ Thumbs.db
 *.png
 *.webp
 
+# Markup, markdown, code docs
+*.md
+*.mdc
+*.mdx
+
 # License
 LICENSE
