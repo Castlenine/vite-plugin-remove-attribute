@@ -1,6 +1,6 @@
 {
   "name": "@castlenine/vite-plugin-remove-attribute",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Vite plugin that enables the removal of specified attributes, which is useful for excluding attributes like 'data-testid' that are used in testing. The options include the ability to specify file extensions, attributes, and folders and files to ignore.",
   "license": "MIT",
   "keywords": [
@@ -32,13 +32,13 @@
     "name": "Alex Castlenine",
     "url": "https://github.com/Castlenine"
   },
-  "homepage": "https://github.com/castlenine/vite-plugin-remove-attribute",
+  "homepage": "https://github.com/Castlenine/vite-plugin-remove-attribute",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/castlenine/vite-plugin-remove-attribute.git"
+    "url": "git+https://github.com/Castlenine/vite-plugin-remove-attribute.git"
   },
   "bugs": {
-    "url": "https://github.com/castlenine/vite-plugin-remove-attribute/issues"
+    "url": "https://github.com/Castlenine/vite-plugin-remove-attribute/issues"
   },
   "type": "module",
   "sideEffects": false,
@@ -130,7 +130,7 @@
   "devEngines": {
     "runtime": {
       "name": "node",
-      "version": ">=24.18.0",
+      "version": "^24.15.0 || >=26.0.0",
       "onFail": "error"
     },
     "packageManager": {

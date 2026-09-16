@@ -61,7 +61,7 @@ describe('getIgnoredPaths', () => {
 		);
 
 		expect(RESULT.slice(0, 2)).toEqual(['src/tests', 'Header.svelte']);
-		expect(RESULT).toEqual(expect.arrayContaining(DEFAULT_IGNORE_PATHS));
+		expect(RESULT).toEqual(expect.arrayContaining([...DEFAULT_IGNORE_PATHS]));
 	});
 
 	it('omits the defaults when ignoreDefaults is false', () => {
@@ -168,6 +168,12 @@ describe('findExpressionEnd', () => {
 		expect(findExpressionEnd('{a ? { b: 1 } : 2', 0)).toBe(-1);
 		expect(findExpressionEnd('{`unterminated', 0)).toBe(-1);
 	});
+
+	it('treats an escaped quote inside a string as text', () => {
+		const INPUT = '{\'a\\\'}\' + "b\\"}"}';
+
+		expect(findExpressionEnd(INPUT, 0)).toBe(INPUT.length - 1);
+	});
 });
 
 describe('findAttributeRanges', () => {
@@ -204,6 +210,11 @@ describe('removeAttributes', () => {
 		expect(removeAttributes('<div data-testid={`item-${index}`}>', ['data-testid'])).toBe('<div>');
 		expect(removeAttributes("<div data-testid={a ? '}' : '{'}>", ['data-testid'])).toBe('<div>');
 		expect(removeAttributes('<div data-testid={{ a: 1 }.a} id="x">', ['data-testid'])).toBe('<div id="x">');
+	});
+
+	it('removes expression values holding escaped quotes', () => {
+		expect(removeAttributes("<div data-testid={'a\\'}'} id=\"x\">", ['data-testid'])).toBe('<div id="x">');
+		expect(removeAttributes('<div data-testid={`a\\`}`} id="x">', ['data-testid'])).toBe('<div id="x">');
 	});
 
 	it('removes bare attributes', () => {

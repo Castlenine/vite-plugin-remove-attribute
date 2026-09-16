@@ -64,11 +64,11 @@ function decodeMappings(mappings: string): Segment[][] {
 			.split(',')
 			.filter((segment) => segment !== '')
 			.map((segment) => {
-				const [GENERATED_DELTA = 0, , LINE_DELTA = 0, COLUMN_DELTA = 0] = decodeVlqs(segment);
+				const [generatedDelta = 0, , lineDelta = 0, columnDelta = 0] = decodeVlqs(segment);
 
-				generatedColumn += GENERATED_DELTA;
-				originalLine += LINE_DELTA;
-				originalColumn += COLUMN_DELTA;
+				generatedColumn += generatedDelta;
+				originalLine += lineDelta;
+				originalColumn += columnDelta;
 
 				return [generatedColumn, originalLine, originalColumn];
 			});
