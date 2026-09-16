@@ -32,13 +32,13 @@
     "name": "Alex Castlenine",
     "url": "https://github.com/Castlenine"
   },
-  "homepage": "https://github.com/castlenine/vite-plugin-remove-attribute",
+  "homepage": "https://github.com/Castlenine/vite-plugin-remove-attribute",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/castlenine/vite-plugin-remove-attribute.git"
+    "url": "git+https://github.com/Castlenine/vite-plugin-remove-attribute.git"
   },
   "bugs": {
-    "url": "https://github.com/castlenine/vite-plugin-remove-attribute/issues"
+    "url": "https://github.com/Castlenine/vite-plugin-remove-attribute/issues"
   },
   "type": "module",
   "sideEffects": false,

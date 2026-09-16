@@ -13,7 +13,7 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
 
 ## Getting Started
 
-1. [Fork](https://github.com/castlenine/vite-plugin-remove-attribute/fork) the repository.
+1. [Fork](https://github.com/Castlenine/vite-plugin-remove-attribute/fork) the repository.
 2. Clone your fork locally:
 
    ```shell
@@ -103,8 +103,8 @@ Before opening a pull request, you can also run `pnpm package` — it builds the
 
 ## Reporting Issues
 
-- [Report a bug](https://github.com/castlenine/vite-plugin-remove-attribute/issues/new?template=bug-report.yml)
-- [Request a feature](https://github.com/castlenine/vite-plugin-remove-attribute/issues/new?template=feature-request.yml)
+- [Report a bug](https://github.com/Castlenine/vite-plugin-remove-attribute/issues/new?template=bug-report.yml)
+- [Request a feature](https://github.com/Castlenine/vite-plugin-remove-attribute/issues/new?template=feature-request.yml)
 
 ## AI Disclosure
 
