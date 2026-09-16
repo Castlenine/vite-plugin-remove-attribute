@@ -1,7 +1,6 @@
-import type { Plugin } from 'vite';
 import type { Options } from './types';
+import type { Plugin } from 'vite';
 
-import { generateRemovalSourceMap } from './sourcemap';
 import {
 	findAttributeRanges,
 	getIgnoredPaths,
@@ -12,6 +11,7 @@ import {
 	stripQuery,
 	toRelativePath,
 } from './utilities';
+import { generateRemovalSourceMap } from './sourcemap';
 
 export type { Options } from './types';
 

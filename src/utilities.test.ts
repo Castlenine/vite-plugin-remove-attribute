@@ -61,7 +61,7 @@ describe('getIgnoredPaths', () => {
 		);
 
 		expect(RESULT.slice(0, 2)).toEqual(['src/tests', 'Header.svelte']);
-		expect(RESULT).toEqual(expect.arrayContaining(DEFAULT_IGNORE_PATHS));
+		expect(RESULT).toEqual(expect.arrayContaining([...DEFAULT_IGNORE_PATHS]));
 	});
 
 	it('omits the defaults when ignoreDefaults is false', () => {

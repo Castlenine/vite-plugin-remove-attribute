@@ -2,7 +2,7 @@ import type { Options, ResolvedOptions } from './types';
 
 import { relative, sep } from 'node:path';
 
-const DEFAULT_IGNORE_PATHS: string[] = [
+const DEFAULT_IGNORE_PATHS = [
 	// Node modules
 	'node_modules',
 
@@ -50,7 +50,7 @@ const DEFAULT_IGNORE_PATHS: string[] = [
 	'browserslist', // Browser compatibility list for Angular
 
 	'.cache', // Cache files for various tools
-];
+] as const;
 
 const REGEX_SPECIAL_CHARACTERS_REGEX = /[.*+?^${}()|[\]\\]/g;
 const LEADING_RELATIVE_PREFIX_REGEX = /^(?:\.\/|\/)+/;
@@ -201,7 +201,7 @@ function getTokenRegex(token: string): RegExp {
  *
  * @returns `true` if the relative path matches any ignore token; otherwise, `false`.
  */
-function hasIgnorePath(relativePath: string, tokens: string[]): boolean {
+function hasIgnorePath(relativePath: string, tokens: readonly string[]): boolean {
 	const PATH = relativePath.replace(LEADING_PARENT_SEGMENTS_REGEX, '');
 
 	return tokens.some((token) => getTokenRegex(token).test(PATH));
@@ -269,45 +269,45 @@ type ScanStep = 'closed' | 'continue' | 'skip-next';
  * and their `${…}` placeholders, and reports when the opening brace is closed
  */
 class ExpressionScanner {
-	private readonly frames: Frame[] = [{ kind: 'expression', depth: 1 }];
-	private stringQuote = '';
-	private isEscaped = false;
+	readonly #frames: Frame[] = [{ kind: 'expression', depth: 1 }];
+	#stringQuote = '';
+	#isEscaped = false;
 
 	step(character: string, next: string): ScanStep {
-		if (this.isEscaped) {
-			this.isEscaped = false;
+		if (this.#isEscaped) {
+			this.#isEscaped = false;
 
 			return 'continue';
 		}
 
 		if (character === '\\') {
-			this.isEscaped = true;
+			this.#isEscaped = true;
 
 			return 'continue';
 		}
 
-		if (this.stringQuote !== '') {
-			if (character === this.stringQuote) {
-				this.stringQuote = '';
+		if (this.#stringQuote !== '') {
+			if (character === this.#stringQuote) {
+				this.#stringQuote = '';
 			}
 
 			return 'continue';
 		}
 
-		const FRAME = this.frames.at(-1);
+		const FRAME = this.#frames.at(-1);
 
 		if (!FRAME) {
 			return 'continue';
 		}
 
-		return FRAME.kind === 'template' ? this.stepTemplate(character, next) : this.stepExpression(FRAME, character);
+		return FRAME.kind === 'template' ? this.#stepTemplate(character, next) : this.#stepExpression(FRAME, character);
 	}
 
-	private stepTemplate(character: string, next: string): ScanStep {
+	#stepTemplate(character: string, next: string): ScanStep {
 		if (character === '`') {
-			this.frames.pop();
+			this.#frames.pop();
 		} else if (character === '$' && next === '{') {
-			this.frames.push({ kind: 'expression', depth: 1 });
+			this.#frames.push({ kind: 'expression', depth: 1 });
 
 			return 'skip-next';
 		}
@@ -315,32 +315,32 @@ class ExpressionScanner {
 		return 'continue';
 	}
 
-	private stepExpression(frame: ExpressionFrame, character: string): ScanStep {
+	#stepExpression(frame: ExpressionFrame, character: string): ScanStep {
 		if (character === "'" || character === '"') {
-			this.stringQuote = character;
+			this.#stringQuote = character;
 		} else if (character === '`') {
-			this.frames.push({ kind: 'template' });
+			this.#frames.push({ kind: 'template' });
 		} else if (character === '{') {
 			frame.depth++;
 		} else if (character === '}') {
-			return this.closeBrace(frame);
+			return this.#closeBrace(frame);
 		}
 
 		return 'continue';
 	}
 
-	private closeBrace(frame: ExpressionFrame): ScanStep {
+	#closeBrace(frame: ExpressionFrame): ScanStep {
 		frame.depth--;
 
 		if (frame.depth > 0) {
 			return 'continue';
 		}
 
-		if (this.frames.length === 1) {
+		if (this.#frames.length === 1) {
 			return 'closed';
 		}
 
-		this.frames.pop();
+		this.#frames.pop();
 
 		return 'continue';
 	}
@@ -418,12 +418,12 @@ function findAttributeRangesFor(input: string, attribute: string): Range[] {
 
 	let match = PATTERN.exec(input);
 
-	while (match !== null) {
+	while (match != null) {
 		const MATCH_END = match.index + match[0].length;
 
 		let attributeEnd = MATCH_END;
 
-		if (match[2] !== undefined) {
+		if (match[2] != null) {
 			const CLOSING_BRACE_INDEX = findExpressionEnd(input, MATCH_END - 1);
 
 			// An unbalanced expression means the source does not parse as written: leave it alone rather than
@@ -461,16 +461,16 @@ function findAttributeRangesFor(input: string, attribute: string): Range[] {
 function findAttributeRanges(input: string, attributes: string[]): Range[] {
 	const RANGES = attributes
 		.flatMap((attribute) => findAttributeRangesFor(input, attribute))
-		.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+		.sort((first, second) => first[0] - second[0] || first[1] - second[1]);
 	const MERGED: [number, number][] = [];
 
-	for (const [START, END] of RANGES) {
+	for (const [start, end] of RANGES) {
 		const LAST = MERGED.at(-1);
 
-		if (LAST && START <= LAST[1]) {
-			LAST[1] = Math.max(LAST[1], END);
+		if (LAST && start <= LAST[1]) {
+			LAST[1] = Math.max(LAST[1], end);
 		} else {
-			MERGED.push([START, END]);
+			MERGED.push([start, end]);
 		}
 	}
 
@@ -498,9 +498,9 @@ function removeRanges(input: string, ranges: Range[]): string {
 
 	let lastEnd = 0;
 
-	for (const [START, END] of ranges) {
-		SEGMENTS.push(input.slice(lastEnd, START));
-		lastEnd = END;
+	for (const [start, end] of ranges) {
+		SEGMENTS.push(input.slice(lastEnd, start));
+		lastEnd = end;
 	}
 
 	SEGMENTS.push(input.slice(lastEnd));
@@ -526,6 +526,7 @@ function removeAttributes(input: string, attributes: string[]): string {
 }
 
 export type { Range };
+
 export {
 	cleanIgnoredPath,
 	cleanIgnoredPaths,

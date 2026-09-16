@@ -1,6 +1,6 @@
-import type { SourceMap } from './sourcemap';
 import type { Options } from './types';
 import type { Plugin, ResolvedConfig } from 'vite';
+import type { SourceMap } from './sourcemap';
 
 import { describe, expect, it } from 'vitest';
 

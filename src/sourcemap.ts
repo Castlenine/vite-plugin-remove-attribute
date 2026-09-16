@@ -51,42 +51,42 @@ function encodeVlq(value: number): string {
  * Builds the `mappings` string one generated line at a time, encoding every segment as deltas from the previous one
  */
 class MappingsWriter {
-	private readonly lines: string[] = [];
-	private segments: string[] = [];
-	private lastGeneratedColumn = 0;
-	private lastOriginalLine = 0;
-	private lastOriginalColumn = 0;
-	private lastMappedColumn = -1;
+	readonly #lines: string[] = [];
+	#segments: string[] = [];
+	#lastGeneratedColumn = 0;
+	#lastOriginalLine = 0;
+	#lastOriginalColumn = 0;
+	#lastMappedColumn = -1;
 
 	addSegment(generatedColumn: number, originalLine: number, originalColumn: number): void {
 		// Two candidates for the same generated column always describe the same original position
-		if (generatedColumn === this.lastMappedColumn) {
+		if (generatedColumn === this.#lastMappedColumn) {
 			return;
 		}
 
-		this.segments.push(
-			encodeVlq(generatedColumn - this.lastGeneratedColumn) +
+		this.#segments.push(
+			encodeVlq(generatedColumn - this.#lastGeneratedColumn) +
 				encodeVlq(0) +
-				encodeVlq(originalLine - this.lastOriginalLine) +
-				encodeVlq(originalColumn - this.lastOriginalColumn),
+				encodeVlq(originalLine - this.#lastOriginalLine) +
+				encodeVlq(originalColumn - this.#lastOriginalColumn),
 		);
-		this.lastGeneratedColumn = generatedColumn;
-		this.lastOriginalLine = originalLine;
-		this.lastOriginalColumn = originalColumn;
-		this.lastMappedColumn = generatedColumn;
+		this.#lastGeneratedColumn = generatedColumn;
+		this.#lastOriginalLine = originalLine;
+		this.#lastOriginalColumn = originalColumn;
+		this.#lastMappedColumn = generatedColumn;
 	}
 
 	endLine(): void {
-		this.lines.push(this.segments.join(','));
-		this.segments = [];
-		this.lastGeneratedColumn = 0;
-		this.lastMappedColumn = -1;
+		this.#lines.push(this.#segments.join(','));
+		this.#segments = [];
+		this.#lastGeneratedColumn = 0;
+		this.#lastMappedColumn = -1;
 	}
 
 	toString(): string {
 		this.endLine();
 
-		return this.lines.join(';');
+		return this.#lines.join(';');
 	}
 }
 
@@ -118,7 +118,7 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 	 * @param from - Start index in the original source.
 	 * @param to - End index in the original source.
 	 */
-	const ADVANCE_ORIGINAL = (from: number, to: number): void => {
+	function advanceOriginal(from: number, to: number): void {
 		for (let index = from; index < to; index++) {
 			if (source.charAt(index) === '\n') {
 				originalLine++;
@@ -127,7 +127,7 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 				originalColumn++;
 			}
 		}
-	};
+	}
 
 	/**
 	 * Emits source map segments for the kept region from `from` to `to`.
@@ -141,7 +141,7 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 	 * @param from - Start index of the kept region.
 	 * @param to - End index of the kept region.
 	 */
-	const WRITE_KEPT = (from: number, to: number): void => {
+	function writeKept(from: number, to: number): void {
 		let needsSegment = from < to;
 
 		for (let index = from; index < to; index++) {
@@ -165,17 +165,17 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 
 			previousCharacter = CHARACTER;
 		}
-	};
+	}
 
 	// Emit the kept text before each removed range, then advance the original position through the removed
 	// content; whatever follows the last range is emitted afterwards
-	for (const [START, END] of ranges) {
-		WRITE_KEPT(cursor, START);
-		ADVANCE_ORIGINAL(START, END);
-		cursor = END;
+	for (const [start, end] of ranges) {
+		writeKept(cursor, start);
+		advanceOriginal(start, end);
+		cursor = end;
 	}
 
-	WRITE_KEPT(cursor, source.length);
+	writeKept(cursor, source.length);
 
 	return {
 		version: 3,
@@ -187,4 +187,5 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 }
 
 export type { SourceMap };
+
 export { encodeVlq, generateRemovalSourceMap };

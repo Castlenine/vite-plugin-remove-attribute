@@ -19,6 +19,7 @@ declare function removeAttributesPlugin(options: PluginOptions): Plugin;
 declare namespace removeAttributesPlugin {
 	export type Options = PluginOptions;
 }
+
 export = removeAttributesPlugin;
 `;
 
