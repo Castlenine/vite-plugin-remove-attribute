@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.3
+
+### Changed
+
+- Internal only: contributor tooling and documentation, with no behaviour change.
+- The root `prepare` script was removed; the Lefthook git hooks are now installed by Lefthook's own `postinstall`, approved through `allowBuilds` in `pnpm-workspace.yaml`. If the hooks are missing, run `pnpm exec lefthook install`.
+- The unused `esbuild` and `unrs-resolver` entries were dropped from `allowBuilds`, leaving `lefthook` as the only approved build.
+- `pnpm lint`, `pnpm lint:fix`, `pnpm format` and `pnpm format:check` no longer use the ESLint / Prettier caches.
+- Nothing in the published `dist/` output changed.
+
 ## 2.0.2
 
 ### Changed
