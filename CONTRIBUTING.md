@@ -9,7 +9,7 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
 | Requirement                    | Version         | Notes                                                                                                                                                      |
 | ------------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Node.js](https://nodejs.org/) | v24.15+ or v26+ | Enforced by `devEngines` in `package.json` (`.nvmrc` pins the exact version for `nvm use`); the published plugin itself supports Node `>=18` for consumers |
-| [pnpm](https://pnpm.io/)       | 12+             | Avoid using `npm install` and `yarn install` — use `pnpm install` instead                                                                                  |
+| [pnpm](https://pnpm.io/)       | 12.4.2+         | Enforced by `devEngines` in `package.json` — install it yourself, it is not auto-downloaded; use `pnpm install`, never `npm install` or `yarn install`     |
 
 ## Getting Started
 
@@ -87,9 +87,18 @@ Optionally, you can use `pnpm commit` to launch the interactive Commitizen promp
 | -------------------- | ---------------------------------------------------------- | ------------------------------------------- |
 | ESLint               | `pnpm lint:fix`                                            | Lint and auto-fix TypeScript and JavaScript |
 | Prettier             | `pnpm format`                                              | Format all files                            |
+| markdownlint         | `pnpm markdownlint:fix`                                    | Lint and auto-fix Markdown                  |
 | TypeScript           | `pnpm type-check`                                          | Type-check the codebase                     |
 | Vitest               | `pnpm test` (also `pnpm test:watch`, `pnpm test:coverage`) | Run the test suite                          |
-| **All of the above** | `pnpm clean-code`                                          | Run Prettier, then ESLint, in sequence      |
+| **All of the above** | `pnpm clean-code`                                          | Run Prettier, ESLint, then markdownlint     |
+
+### Secret Scanning (optional)
+
+The pre-commit hook also runs [ggshield](https://github.com/GitGuardian/ggshield), GitGuardian's CLI, to scan staged files for secrets (API keys, tokens, credentials) before they reach the repository.
+
+- **Optional:** when `ggshield` is not installed, the hook prints a warning and the commit proceeds.
+- **Setup:** [install it](https://docs.gitguardian.com/ggshield-docs/getting-started), then authenticate once with `ggshield auth login` (requires a free GitGuardian account). An installed but unauthenticated `ggshield` fails the scan and blocks the commit.
+- **When a secret is found:** the commit is blocked. Remove the secret and rotate it if it was real. For a false positive, run `ggshield secret ignore --last-found` and commit the resulting `.gitguardian.yaml`.
 
 Before opening a pull request, you can also run `pnpm package` — it builds the package and validates the output with `publint` and `arethetypeswrong`. These are the same checks that run before publishing.
 

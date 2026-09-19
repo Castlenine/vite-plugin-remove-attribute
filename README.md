@@ -25,7 +25,7 @@ Vite plugin that allows the removal of specified attributes and supports a varie
   - [Opting out of the built-in ignore list](#opting-out-of-the-built-in-ignore-list)
   - [CommonJS](#commonjs)
 - [Changelog](#changelog)
-- [Acknowledgement](#acknowledgement)
+- [Acknowledgment](#acknowledgment)
 - [License](#license)
 
 ## Disclaimer
@@ -154,6 +154,7 @@ import removeAttribute from '@castlenine/vite-plugin-remove-attribute';
 export default defineConfig(({ mode }) => ({
  plugins: [
   vue(), // Vue plugin should be placed before removeAttribute
+
   mode === 'production'
    ? removeAttribute({
      extensions: ['vue'],
@@ -177,6 +178,7 @@ import removeAttribute from '@castlenine/vite-plugin-remove-attribute';
 export default defineConfig({
  plugins: [
   vue(), // Vue plugin should be placed before removeAttribute
+
   removeAttribute({
    extensions: ['vue', 'ts', 'js'],
    attributes: ['data-testid', 'data-id'],
@@ -216,12 +218,11 @@ module.exports = defineConfig({
 
 ## Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md).
+For more information, refer to the [CHANGELOG.md](./CHANGELOG.md).
 
-## Acknowledgement
+## Acknowledgment
 
-This project is a fork of [mustafadalga/remove-attr](https://github.com/mustafadalga/remove-attr). See
-[ACKNOWLEDGEMENT.md](./ACKNOWLEDGEMENT.md).
+This project is a fork of [mustafadalga/remove-attr](https://github.com/mustafadalga/remove-attr). See [ACKNOWLEDGMENT.md](./ACKNOWLEDGMENT.md) for more details.
 
 ## License
 
