@@ -63,7 +63,6 @@ Optionally, you can use `pnpm commit` to launch the interactive Commitizen promp
 | `comment`         | Modifications or additions to code comments        |
 | `config`          | Modifications to configuration files               |
 | `deps`            | Dependency additions, removals, or updates         |
-| `design`          | Design or UX asset changes                         |
 | `docs`            | Changes to documentation                           |
 | `feat`            | A new feature or improvement                       |
 | `fix`             | A bug fix or issue resolution                      |
