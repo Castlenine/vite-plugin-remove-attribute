@@ -1,3 +1,4 @@
+publishBranch: master
 # Fail installs when Node or dependency engines are incompatible with the current runtime.
 engineStrict: true
 # Never auto-install before `pnpm run` — the implicit install is destructive in non-TTY
@@ -7,6 +8,4 @@ verifyDepsBeforeRun: false
 # as most malicious releases are typically identified and removed from the registry within an hour.
 minimumReleaseAge: 2880 # 2 days (1 day by default)
 allowBuilds:
-  esbuild: true
   lefthook: true
-  unrs-resolver: true
