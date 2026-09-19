@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.0.2
+
+### Changed
+
+- Internal only: contributor tooling and documentation, with no behaviour change.
+- Markdown is now linted with markdownlint-cli2, and the pre-commit hook runs an optional ggshield secret scan.
+- Contributors need pnpm `>=12.4.2`, enforced through `devEngines.packageManager`; the `packageManager` field was dropped and pnpm is no longer auto-downloaded.
+- `ACKNOWLEDGEMENT.md` was renamed to `ACKNOWLEDGMENT.md`, and the README links and anchor follow (`#acknowledgement` is now `#acknowledgment`).
+- Development dependencies were refreshed (`@types/node`, `prettier`).
+- Nothing in the published `dist/` output changed.
+
 ## 2.0.1
 
 ### Changed

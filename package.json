@@ -1,6 +1,6 @@
 {
   "name": "@castlenine/vite-plugin-remove-attribute",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A Vite plugin that enables the removal of specified attributes, which is useful for excluding attributes like 'data-testid' that are used in testing. The options include the ability to specify file extensions, attributes, and folders and files to ignore.",
   "license": "MIT",
   "keywords": [
