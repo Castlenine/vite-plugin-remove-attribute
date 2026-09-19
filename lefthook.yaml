@@ -16,6 +16,18 @@ pre-commit:
   parallel: false # Run all hooks in serial mode
   commands:
     universal-checks:
-      # Runs lint-staged on staged files only (eslint --fix + prettier). Sequential so
-      # partially staged files are handled safely.
+      priority: 1
+      # Runs lint-staged on staged files only (eslint --fix + prettier + markdownlint --fix).
+      # Sequential so partially staged files are handled safely.
       run: pnpm exec lint-staged --config .lintstagedrc.json --concurrent false
+
+    ggshield:
+      priority: 2
+      # Scan staged files for secrets using GitGuardian's ggshield. Optional: when
+      # the binary is missing, warn and let the commit proceed instead of failing.
+      run: |
+        if command -v ggshield >/dev/null 2>&1; then
+          ggshield secret scan pre-commit
+        else
+          echo "WARNING: Cannot run ggshield (not installed). Install it to scan staged files for secrets: https://docs.gitguardian.com/ggshield-docs/getting-started" >&2
+        fi

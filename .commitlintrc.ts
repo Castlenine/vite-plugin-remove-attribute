@@ -40,7 +40,6 @@ const CONFIGURATION = {
 				'comment',
 				'config',
 				'deps',
-				'design',
 				'docs',
 				'feat',
 				'fix',
@@ -111,12 +110,6 @@ const CONFIGURATION = {
 						title: 'Dependencies',
 						emoji: '📦',
 					},
-					design: {
-						description:
-							'Visual or UI changes without new functionality, such as layout, colors, spacing, typography, theme tokens, and assets',
-						title: 'Design',
-						emoji: '💄',
-					},
 					docs: {
 						description:
 							'Changes to Markdown documentation (README, CHANGELOG, documentation/) or in-code documentation (JSDoc); plain inline comments are comment',
@@ -173,7 +166,7 @@ const CONFIGURATION = {
 					},
 					style: {
 						description:
-							'Changes to code formatting that do not impact logic or functionality, such as modifying whitespace, indentation, semicolons, or applying code style rules. Does not include visual design changes.',
+							'Changes to code formatting that do not impact logic or functionality, such as modifying whitespace, indentation, semicolons, or applying code style rules.',
 						title: 'Style',
 						emoji: '🎨',
 					},

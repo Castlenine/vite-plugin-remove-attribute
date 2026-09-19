@@ -62,7 +62,7 @@ body:
     attributes:
       label: Plugin Version
       description: The version of `@castlenine/vite-plugin-remove-attribute` you are using.
-      placeholder: '2.0.1'
+      placeholder: '2.0.2'
     validations:
       required: true
 

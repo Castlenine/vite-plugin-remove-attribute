@@ -14,7 +14,7 @@ const CONFIGURATION = defineConfig(
 		ignores: [
 			// Node modules
 			'node_modules/',
-			// Build output
+			// Output
 			'dist/',
 			// Vite
 			'vite.config.js.timestamp-*',
@@ -72,6 +72,7 @@ const CONFIGURATION = defineConfig(
 	},
 
 	// ─── Import & Export Ordering ────────────────────────────────────────────────
+	// No ESLint plugin supports auto-fixing declaration order by variable name — all sort by module path
 	// Member and export sorting: perfectionist with types-first grouping
 	{
 		plugins: { perfectionist },
@@ -154,7 +155,7 @@ const CONFIGURATION = defineConfig(
 			'@typescript-eslint/no-unsafe-member-access': 'warn',
 			'@typescript-eslint/no-unsafe-assignment': 'warn',
 			'@typescript-eslint/no-unsafe-argument': 'warn',
-			'@typescript-eslint/unbound-method': 'warn',
+			'@typescript-eslint/unbound-method': 'off', // Callbacks passed as references (Vite hooks, array methods) false-positive when the method is not called with a class receiver
 			'@typescript-eslint/await-thenable': 'warn',
 			'@typescript-eslint/no-unnecessary-type-assertion': 'warn',
 			'@typescript-eslint/no-misused-promises': 'warn',
@@ -251,7 +252,7 @@ const CONFIGURATION = defineConfig(
 			eqeqeq: ['warn', 'smart'],
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'no-debugger': 'warn',
-			'no-console': 'warn', // A published Vite plugin must not log; the plugin has no console stripper, so keep it out of the source
+			'no-console': 'warn', // A published Vite plugin must not log; the plugin has no console stripper, so restrict console logging to essential debugging or informative cases only
 			'no-empty': ['warn', { allowEmptyCatch: false }],
 			'no-return-assign': 'warn',
 		},
@@ -276,6 +277,14 @@ const CONFIGURATION = defineConfig(
 		files: ['*.config.ts', '*.config.js', '.commitlintrc.ts'],
 		rules: {
 			'@typescript-eslint/naming-convention': 'off', // Config files must match external tool schemas (Vite, ESLint, commitlint) which use their own naming
+		},
+	},
+
+	// ─── Override: Root Scripts ───────────────────────────────────────────────────
+	{
+		files: ['*.ts'],
+		rules: {
+			'no-console': 'off', // Root-level CLI scripts report through stdout/stderr; only the published `src/` must stay silent
 		},
 	},
 

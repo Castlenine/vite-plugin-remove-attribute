@@ -27,15 +27,7 @@
     "verbatimModuleSyntax": true /* Require explicit `import type` and `export type` for type-only bindings */,
     "types": ["node", "vitest/globals"] /* `vitest/globals` backs `test.globals: true` in vite.config.ts */
   },
-  "include": [
-    "./src/**/*.js",
-    "./src/**/*.ts",
-    "./src/**/*.d.ts",
-    "./*.test.ts",
-    "./.commitlintrc.ts",
-    "./eslint.config.ts",
-    "./vite.config.ts"
-  ],
+  "include": ["./src/**/*.js", "./src/**/*.ts", "./src/**/*.d.ts", "./*.ts", "./.commitlintrc.ts"],
   "exclude": [
     "node_modules",
     "dist",

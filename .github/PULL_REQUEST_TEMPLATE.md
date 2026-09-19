@@ -26,7 +26,7 @@
 - [ ] PR title follows [Conventional Commits](https://www.conventionalcommits.org/) format (e.g.,
       `feat: support attribute values with template literals`)
 - [ ] PR targets `development`
-- [ ] `pnpm clean-code` passes (Prettier, ESLint)
+- [ ] `pnpm clean-code` passes (Prettier, ESLint, markdownlint)
 - [ ] `pnpm type-check` passes
 - [ ] `pnpm test` passes (tests added or updated when behavior changes)
 - [ ] `pnpm build` succeeds

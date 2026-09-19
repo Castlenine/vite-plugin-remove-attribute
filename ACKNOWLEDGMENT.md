@@ -1,4 +1,4 @@
-# Acknowledgement
+# Acknowledgment
 
 This project is a fork of [mustafadalga/remove-attr](https://github.com/mustafadalga/remove-attr)
 
