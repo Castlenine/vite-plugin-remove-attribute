@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 2.0.3
+## [2.0.3] - 2026-09-19
 
 ### Changed
 
@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `pnpm lint`, `pnpm lint:fix`, `pnpm format` and `pnpm format:check` no longer use the ESLint / Prettier caches.
 - Nothing in the published `dist/` output changed.
 
-## 2.0.2
+## [2.0.2] - 2026-09-19
 
 ### Changed
 
@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Development dependencies were refreshed (`@types/node`, `prettier`).
 - Nothing in the published `dist/` output changed.
 
-## 2.0.1
+## [2.0.1] - 2026-09-16
 
 ### Changed
 
@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A contributing guide and GitHub issue / pull request templates were added.
 - Nothing in the published `dist/` output changed.
 
-## 2.0.0
+## [2.0.0] - 2026-09-15
 
 ### Fixed
 
@@ -59,3 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The package has been renamed from `@castlenine/vite-remove-attribute` to `@castlenine/vite-plugin-remove-attribute` to align with the Vite plugin naming convention. Uninstall the old name, install the new one and update the import specifier; the default export, the options and the behaviour documented above are otherwise the same.
 - The CommonJS entry moved from `dist/index.umd.cjs` to `dist/index.cjs`. `require()` still returns the plugin function and `.default` is also available; the entry is typed by `dist/index.d.cts`.
+
+[2.0.3]: https://github.com/Castlenine/vite-plugin-remove-attribute/compare/v2.0.2...v2.0.3
+[2.0.2]: https://github.com/Castlenine/vite-plugin-remove-attribute/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/Castlenine/vite-plugin-remove-attribute/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/Castlenine/vite-plugin-remove-attribute/releases/tag/v2.0.0
