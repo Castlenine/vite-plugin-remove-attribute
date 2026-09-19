@@ -8,23 +8,26 @@
 
 ## Type of Change
 
-- [ ] `feat` — New feature or improvement
-- [ ] `fix` / `hotfix` — Bug fix
-- [ ] `refactor` — Code restructuring (no behavior change)
+- [ ] `BREAKING-CHANGE` — A change that breaks backward compatibility
+- [ ] `build` — Modifications to build systems or processes
+- [ ] `chore` — Routine maintenance tasks
+- [ ] `ci` — Updates to CI/CD configuration
+- [ ] `comment` — Modifications or additions to code comments
+- [ ] `config` — Modifications to configuration files
+- [ ] `deps` — Dependency additions, removals, or updates
+- [ ] `docs` — Changes to documentation
+- [ ] `feat` — A new feature or improvement
+- [ ] `fix` — A bug fix or issue resolution
 - [ ] `perf` — Performance optimization
-- [ ] `deps` — Dependency update
-- [ ] `test` — Tests
-- [ ] `docs` — Documentation
-- [ ] `style` — Code formatting (no logic change)
-- [ ] `build` / `ci` — Build system or CI/CD
-- [ ] `chore` / `config` / `prune` — Maintenance or cleanup
-- [ ] `security` — Security fix or enhancement
-- [ ] `BREAKING-CHANGE` — Backward-incompatible change
+- [ ] `prune` — Removal of unnecessary files or cleanup
+- [ ] `refactor` — Code restructuring without behavior changes
+- [ ] `security` — Security vulnerability fixes or enhancements
+- [ ] `style` — Code formatting changes (no logic changes)
+- [ ] `test` — Adding or improving tests
 
 ## Checklist
 
-- [ ] PR title follows [Conventional Commits](https://www.conventionalcommits.org/) format (e.g.,
-      `feat: support attribute values with template literals`)
+- [ ] PR title follows [Conventional Commits](https://www.conventionalcommits.org/) format (e.g., `feat: support attribute values with template literals`)
 - [ ] PR targets `development`
 - [ ] `pnpm clean-code` passes (Prettier, ESLint, markdownlint)
 - [ ] `pnpm type-check` passes
