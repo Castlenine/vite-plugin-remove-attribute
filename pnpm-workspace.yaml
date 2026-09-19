@@ -8,6 +8,4 @@ verifyDepsBeforeRun: false
 # as most malicious releases are typically identified and removed from the registry within an hour.
 minimumReleaseAge: 2880 # 2 days (1 day by default)
 allowBuilds:
-  esbuild: true
   lefthook: true
-  unrs-resolver: true

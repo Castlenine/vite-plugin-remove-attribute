@@ -27,7 +27,7 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
    pnpm install
    ```
 
-   `pnpm install` automatically runs `prepare`, which installs the Lefthook git hooks — no extra step required.
+   `pnpm install` runs Lefthook's own `postinstall` script (allowed through `allowBuilds` in `pnpm-workspace.yaml`), which installs the git hooks — no extra step required. If the hooks are missing, run `pnpm exec lefthook install`.
 
 4. Run the tests and build to verify your setup:
 
@@ -44,8 +44,7 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
 
 ## Commit Conventions
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by
-[Commitlint](https://commitlint.js.org/).
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by [Commitlint](https://commitlint.js.org/).
 
 Optionally, you can use `pnpm commit` to launch the interactive Commitizen prompt, which guides you through the format.
 

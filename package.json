@@ -91,8 +91,7 @@
     "remove-dist-folder": "rimraf dist",
     "update-packages": "ncu --interactive",
     "update-packages:minor": "ncu --target minor --interactive",
-    "update-packages:patch": "ncu --target patch --interactive",
-    "prepare": "lefthook install"
+    "update-packages:patch": "ncu --target patch --interactive"
   },
   "peerDependencies": {
     "vite": ">=2.0.0"
