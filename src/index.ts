@@ -2,14 +2,23 @@ import type { Options } from './types';
 import type { Plugin } from 'vite';
 
 import {
+	ASTRO_EXTENSIONS,
+	DEFAULT_EXTENSIONS,
 	findAttributeRanges,
 	getIgnoredPaths,
 	getOptions,
 	hasExtension,
 	hasIgnorePath,
+	HTML_EXTENSIONS,
+	JAVASCRIPT_EXTENSIONS,
+	JSX_EXTENSIONS,
 	removeRanges,
+	SCRIPT_EXTENSIONS,
 	stripQuery,
+	SVELTE_EXTENSIONS,
 	toRelativePath,
+	TYPESCRIPT_EXTENSIONS,
+	VUE_EXTENSIONS,
 } from './utilities';
 import { generateRemovalSourceMap } from './sourcemap';
 
@@ -27,7 +36,8 @@ export type { Options } from './types';
  * are resolved relative to the Vite root.
  *
  * @param options - Plugin configuration including which attributes
- *   and file extensions to target, and optional ignore paths.
+ *   to remove, and optionally which file extensions to target and
+ *   which paths to ignore. `extensions` defaults to `DEFAULT_EXTENSIONS`.
  *
  * @returns A Vite plugin object that removes attributes during
  *   transformation steps.
@@ -69,3 +79,15 @@ function removeAttributesPlugin(options: Options): Plugin {
 }
 
 export default removeAttributesPlugin;
+
+export {
+	ASTRO_EXTENSIONS,
+	DEFAULT_EXTENSIONS,
+	HTML_EXTENSIONS,
+	JAVASCRIPT_EXTENSIONS,
+	JSX_EXTENSIONS,
+	SCRIPT_EXTENSIONS,
+	SVELTE_EXTENSIONS,
+	TYPESCRIPT_EXTENSIONS,
+	VUE_EXTENSIONS,
+};

@@ -52,6 +52,61 @@ const DEFAULT_IGNORE_PATHS = [
 	'.cache', // Cache files for various tools
 ] as const;
 
+/**
+ * JavaScript source extensions
+ */
+const JAVASCRIPT_EXTENSIONS: readonly string[] = Object.freeze(['js', 'mjs', 'cjs'] as const);
+
+/**
+ * TypeScript source extensions
+ */
+const TYPESCRIPT_EXTENSIONS: readonly string[] = Object.freeze(['ts', 'mts', 'cts'] as const);
+
+/**
+ * JSX and TSX source extensions, used by React, Preact, Solid, Qwik and Vue JSX
+ */
+const JSX_EXTENSIONS: readonly string[] = Object.freeze(['jsx', 'tsx'] as const);
+
+/**
+ * Every extension whose file is plain script: JavaScript, TypeScript and JSX
+ */
+const SCRIPT_EXTENSIONS: readonly string[] = Object.freeze([
+	...JAVASCRIPT_EXTENSIONS,
+	...TYPESCRIPT_EXTENSIONS,
+	...JSX_EXTENSIONS,
+] as const);
+
+/**
+ * Svelte single-file component extension (`.svelte.js` and `.svelte.ts` rune modules fall under the script presets)
+ */
+const SVELTE_EXTENSIONS: readonly string[] = Object.freeze(['svelte'] as const);
+
+/**
+ * Vue single-file component extension
+ */
+const VUE_EXTENSIONS: readonly string[] = Object.freeze(['vue'] as const);
+
+/**
+ * Astro component extension
+ */
+const ASTRO_EXTENSIONS: readonly string[] = Object.freeze(['astro'] as const);
+
+/**
+ * Entry HTML document extensions
+ */
+const HTML_EXTENSIONS: readonly string[] = Object.freeze(['html', 'htm'] as const);
+
+/**
+ * Every extension processed when `Options.extensions` is not provided: markup and JSX files
+ */
+const DEFAULT_EXTENSIONS: readonly string[] = Object.freeze([
+	...JSX_EXTENSIONS,
+	...SVELTE_EXTENSIONS,
+	...VUE_EXTENSIONS,
+	...ASTRO_EXTENSIONS,
+	...HTML_EXTENSIONS,
+] as const);
+
 const REGEX_SPECIAL_CHARACTERS_REGEX = /[.*+?^${}()|[\]\\]/g;
 const LEADING_RELATIVE_PREFIX_REGEX = /^(?:\.\/|\/)+/;
 const TRAILING_SLASHES_REGEX = /\/+$/;
@@ -65,9 +120,15 @@ function escapeRegExp(value: string): string {
 	return value.replace(REGEX_SPECIAL_CHARACTERS_REGEX, '\\$&');
 }
 
+function isNonEmptyString(value: unknown): value is string {
+	return typeof value === 'string' && value.trim() !== '';
+}
+
 function getOptions(options: Options): ResolvedOptions {
 	return {
-		extensions: Array.isArray(options.extensions) ? options.extensions : [],
+		extensions: Array.isArray(options.extensions)
+			? options.extensions.filter(isNonEmptyString)
+			: [...DEFAULT_EXTENSIONS],
 		attributes: Array.isArray(options.attributes) ? options.attributes : [],
 		ignoreFolders: Array.isArray(options.ignoreFolders) ? options.ignoreFolders : [],
 		ignoreFiles: Array.isArray(options.ignoreFiles) ? options.ignoreFiles : [],
@@ -217,7 +278,7 @@ function hasIgnorePath(relativePath: string, tokens: readonly string[]): boolean
  *
  * @returns A RegExp instance matching any of the specified extensions as a file suffix.
  */
-function getExtensionRegex(extensions: string[]): RegExp {
+function getExtensionRegex(extensions: readonly string[]): RegExp {
 	const KEY = extensions.join('|');
 	const CACHED = EXTENSION_REGEX_CACHE.get(KEY);
 
@@ -243,7 +304,7 @@ function getExtensionRegex(extensions: string[]): RegExp {
  * @returns `true` if the module id (excluding the query suffix) ends with one of the provided extensions;
  *   otherwise, `false`.
  */
-function hasExtension(id: string, extensions: string[]): boolean {
+function hasExtension(id: string, extensions: readonly string[]): boolean {
 	if (extensions.length === 0) {
 		return false;
 	}
@@ -528,8 +589,10 @@ function removeAttributes(input: string, attributes: string[]): string {
 export type { Range };
 
 export {
+	ASTRO_EXTENSIONS,
 	cleanIgnoredPath,
 	cleanIgnoredPaths,
+	DEFAULT_EXTENSIONS,
 	DEFAULT_IGNORE_PATHS,
 	escapeRegExp,
 	findAttributeRanges,
@@ -538,8 +601,15 @@ export {
 	getOptions,
 	hasExtension,
 	hasIgnorePath,
+	HTML_EXTENSIONS,
+	JAVASCRIPT_EXTENSIONS,
+	JSX_EXTENSIONS,
 	removeAttributes,
 	removeRanges,
+	SCRIPT_EXTENSIONS,
 	stripQuery,
+	SVELTE_EXTENSIONS,
 	toRelativePath,
+	TYPESCRIPT_EXTENSIONS,
+	VUE_EXTENSIONS,
 };

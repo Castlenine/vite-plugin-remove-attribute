@@ -1,8 +1,12 @@
 interface Options {
 	/**
-	 * File extensions to process, without the leading dot (e.g. `['svelte', 'vue', 'ts']`)
+	 * File extensions to process, without the leading dot (e.g. `['svelte', 'vue', 'ts']`). Default:
+	 * `DEFAULT_EXTENSIONS`
+	 *
+	 * Compose the exported presets to narrow the list (e.g. `[...JSX_EXTENSIONS, ...SVELTE_EXTENSIONS]`), or pass a
+	 * preset directly (e.g. `DEFAULT_EXTENSIONS`). An empty array processes no file at all.
 	 */
-	extensions: string[];
+	extensions?: readonly string[];
 	/**
 	 * Attribute names to remove (e.g. `['data-testid']`)
 	 */
@@ -27,6 +31,6 @@ interface Options {
 	ignoreDefaults?: boolean;
 }
 
-type ResolvedOptions = Required<Options>;
+type ResolvedOptions = Required<Omit<Options, 'extensions'>> & { extensions: string[] };
 
 export type { Options, ResolvedOptions };

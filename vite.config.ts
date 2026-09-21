@@ -6,18 +6,42 @@ const IS_CI = process.env.CI === 'true';
 // Rolldown emits `exports.default = removeAttributesPlugin;` for the CommonJS bundle (`output.exports: 'named'`). The
 // footer re-exposes the function as `module.exports`, as the 1.0.x UMD build did, while keeping `.default` available:
 // `require()` returns the plugin function, `require().default` works, and TypeScript/Babel `__importDefault` interop
-// resolves to the function either way.
+// resolves to the function either way. Reassigning `module.exports` leaves the `exports` binding untouched, so every
+// named export is copied back onto the function; the loop keeps that list from drifting away from src/index.ts.
 const CJS_FOOTER = `module.exports = exports.default;
 module.exports.default = module.exports;
+
+for (const name of Object.keys(exports)) {
+	if (name !== 'default') module.exports[name] = exports[name];
+}
+
 `;
 
 // Declaration for the CommonJS entry, mirroring the runtime shape above (`export =` plus a namespace merge so that
-// `Options` stays importable from a `require()` consumer)
+// the named exports and `Options` stay reachable from a `require()` consumer)
 const CJS_DECLARATION = `import type { Plugin } from 'vite';
 import type { Options as PluginOptions } from './types.cjs';
 declare function removeAttributesPlugin(options: PluginOptions): Plugin;
 declare namespace removeAttributesPlugin {
 	export type Options = PluginOptions;
+
+	export const JAVASCRIPT_EXTENSIONS: readonly string[];
+
+	export const TYPESCRIPT_EXTENSIONS: readonly string[];
+
+	export const JSX_EXTENSIONS: readonly string[];
+
+	export const SCRIPT_EXTENSIONS: readonly string[];
+
+	export const SVELTE_EXTENSIONS: readonly string[];
+
+	export const VUE_EXTENSIONS: readonly string[];
+
+	export const ASTRO_EXTENSIONS: readonly string[];
+
+	export const HTML_EXTENSIONS: readonly string[];
+
+	export const DEFAULT_EXTENSIONS: readonly string[];
 }
 
 export = removeAttributesPlugin;

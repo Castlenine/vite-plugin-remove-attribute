@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+	ASTRO_EXTENSIONS,
 	cleanIgnoredPaths,
+	DEFAULT_EXTENSIONS,
 	DEFAULT_IGNORE_PATHS,
 	findAttributeRanges,
 	findExpressionEnd,
@@ -9,9 +11,16 @@ import {
 	getOptions,
 	hasExtension,
 	hasIgnorePath,
+	HTML_EXTENSIONS,
+	JAVASCRIPT_EXTENSIONS,
+	JSX_EXTENSIONS,
 	removeAttributes,
+	SCRIPT_EXTENSIONS,
 	stripQuery,
+	SVELTE_EXTENSIONS,
 	toRelativePath,
+	TYPESCRIPT_EXTENSIONS,
+	VUE_EXTENSIONS,
 } from './utilities';
 
 describe('getOptions', () => {
@@ -25,13 +34,37 @@ describe('getOptions', () => {
 		});
 	});
 
-	it('replaces non-array values with empty arrays', () => {
+	it('falls back to the default extensions and an empty attributes array for non-array values', () => {
 		// @ts-expect-error -- deliberately malformed input
-		expect(getOptions({ extensions: 'svelte', attributes: null })).toMatchObject({ extensions: [], attributes: [] });
+		expect(getOptions({ extensions: 'svelte', attributes: null })).toMatchObject({
+			extensions: [...DEFAULT_EXTENSIONS],
+			attributes: [],
+		});
 	});
 
 	it('keeps ignoreDefaults false', () => {
 		expect(getOptions({ extensions: [], attributes: [], ignoreDefaults: false }).ignoreDefaults).toBe(false);
+	});
+
+	it('keeps an explicit empty extensions array empty', () => {
+		expect(getOptions({ extensions: [], attributes: ['data-testid'] }).extensions).toEqual([]);
+	});
+
+	it('drops non-string and blank extensions entries', () => {
+		expect(
+			getOptions({
+				extensions: ['svelte', '', '  ', 42 as unknown as string, null as unknown as string, 'ts'],
+				attributes: [],
+			}).extensions,
+		).toEqual(['svelte', 'ts']);
+	});
+
+	it('accepts a preset passed directly to extensions without spreading', () => {
+		const RESOLVED = getOptions({ attributes: ['x'], extensions: DEFAULT_EXTENSIONS });
+
+		expect(RESOLVED.extensions).toEqual(DEFAULT_EXTENSIONS);
+		expect(RESOLVED.extensions).not.toBe(DEFAULT_EXTENSIONS);
+		expect(Object.isFrozen(RESOLVED.extensions)).toBe(false);
 	});
 });
 
@@ -91,6 +124,89 @@ describe('toRelativePath', () => {
 
 	it('strips the query suffix first', () => {
 		expect(toRelativePath('/repo/src/App.svelte?svelte&type=style', '/repo')).toBe('src/App.svelte');
+	});
+});
+
+describe('extension presets', () => {
+	it('holds lower-case extensions without a leading dot and without duplicates', () => {
+		const PRESETS = [
+			JAVASCRIPT_EXTENSIONS,
+			TYPESCRIPT_EXTENSIONS,
+			JSX_EXTENSIONS,
+			SCRIPT_EXTENSIONS,
+			SVELTE_EXTENSIONS,
+			VUE_EXTENSIONS,
+			ASTRO_EXTENSIONS,
+			HTML_EXTENSIONS,
+			DEFAULT_EXTENSIONS,
+		];
+
+		for (const PRESET of PRESETS) {
+			expect(PRESET).toEqual(PRESET.map((extension) => extension.toLowerCase()));
+			expect(PRESET.some((extension) => extension.startsWith('.'))).toBe(false);
+			expect(new Set(PRESET).size).toBe(PRESET.length);
+		}
+	});
+
+	it('names the expected extensions', () => {
+		expect(JAVASCRIPT_EXTENSIONS).toEqual(['js', 'mjs', 'cjs']);
+		expect(TYPESCRIPT_EXTENSIONS).toEqual(['ts', 'mts', 'cts']);
+		expect(JSX_EXTENSIONS).toEqual(['jsx', 'tsx']);
+		expect(SVELTE_EXTENSIONS).toEqual(['svelte']);
+		expect(VUE_EXTENSIONS).toEqual(['vue']);
+		expect(ASTRO_EXTENSIONS).toEqual(['astro']);
+		expect(HTML_EXTENSIONS).toEqual(['html', 'htm']);
+	});
+
+	it('freezes every exported constant', () => {
+		const EXPORTED = [
+			JAVASCRIPT_EXTENSIONS,
+			TYPESCRIPT_EXTENSIONS,
+			JSX_EXTENSIONS,
+			SCRIPT_EXTENSIONS,
+			SVELTE_EXTENSIONS,
+			VUE_EXTENSIONS,
+			ASTRO_EXTENSIONS,
+			HTML_EXTENSIONS,
+			DEFAULT_EXTENSIONS,
+		];
+
+		for (const CONSTANT of EXPORTED) {
+			expect(Object.isFrozen(CONSTANT)).toBe(true);
+		}
+	});
+
+	it('rejects a consumer trying to grow a preset', () => {
+		expect(() => (DEFAULT_EXTENSIONS as string[]).push('evil')).toThrow(TypeError);
+		expect(DEFAULT_EXTENSIONS).not.toContain('evil');
+	});
+
+	it('resolves the defaults into a fresh mutable copy', () => {
+		const RESOLVED = getOptions({ attributes: ['data-testid'] });
+
+		expect(RESOLVED.extensions).toEqual(DEFAULT_EXTENSIONS);
+		expect(RESOLVED.extensions).not.toBe(DEFAULT_EXTENSIONS);
+		expect(Object.isFrozen(RESOLVED.extensions)).toBe(false);
+
+		RESOLVED.extensions.push('evil');
+
+		expect(DEFAULT_EXTENSIONS).not.toContain('evil');
+	});
+
+	it('composes the unions by spreading', () => {
+		expect(SCRIPT_EXTENSIONS).toEqual([...JAVASCRIPT_EXTENSIONS, ...TYPESCRIPT_EXTENSIONS, ...JSX_EXTENSIONS]);
+		expect(DEFAULT_EXTENSIONS).toEqual([
+			...JSX_EXTENSIONS,
+			...SVELTE_EXTENSIONS,
+			...VUE_EXTENSIONS,
+			...ASTRO_EXTENSIONS,
+			...HTML_EXTENSIONS,
+		]);
+	});
+
+	it('pins the exact preset contents', () => {
+		expect(SCRIPT_EXTENSIONS).toEqual(['js', 'mjs', 'cjs', 'ts', 'mts', 'cts', 'jsx', 'tsx']);
+		expect(DEFAULT_EXTENSIONS).toEqual(['jsx', 'tsx', 'svelte', 'vue', 'astro', 'html', 'htm']);
 	});
 });
 
