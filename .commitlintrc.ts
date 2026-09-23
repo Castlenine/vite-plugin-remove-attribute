@@ -1,3 +1,5 @@
+import type { UserConfig } from '@commitlint/types';
+
 const CONFIGURATION = {
 	extends: ['@commitlint/config-conventional'],
 	// The default conventional parser's headerPattern uses `\w*`, which can never match the hyphenated
@@ -224,6 +226,6 @@ const CONFIGURATION = {
 			},
 		},
 	},
-} as const;
+} as const satisfies UserConfig;
 
 export default CONFIGURATION;

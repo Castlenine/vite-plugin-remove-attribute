@@ -9,7 +9,9 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
 | Requirement                    | Version         | Notes                                                                                                                                                      |
 | ------------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Node.js](https://nodejs.org/) | v24.15+ or v26+ | Enforced by `devEngines` in `package.json` (`.nvmrc` pins the exact version for `nvm use`); the published plugin itself supports Node `>=18` for consumers |
-| [pnpm](https://pnpm.io/)       | 12.4.2+         | Enforced by `devEngines` in `package.json` — install it yourself, it is not auto-downloaded; use `pnpm install`, never `npm install` or `yarn install`     |
+| [pnpm](https://pnpm.io/)       | 11.0.0+         | Enforced by `devEngines` in `package.json` — install it yourself, it is not auto-downloaded; use `pnpm install`, never `npm install` or `yarn install`     |
+
+`pnpm-workspace.yaml` sets `minimumReleaseAge` to two days, so `pnpm add` and `pnpm update-packages` resolve to the newest release that is at least that old; a version published more recently will not install until it ages past that window.
 
 ## Getting Started
 
@@ -36,11 +38,27 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
    pnpm build
    ```
 
+   Optionally, run the slower integration suite, which performs a real `vite build` per framework; every framework it needs is already a devDependency in `package.json`, so there is nothing extra to install:
+
+   ```shell
+   pnpm test:integration
+   ```
+
 ## Development Workflow
 
 1. Create a branch from `development`.
-2. Make your changes, adding or updating tests in `src/*.test.ts` as needed.
+2. Make your changes, adding or updating tests in the matching layer (see [Test layout](#test-layout)).
 3. Push your branch and open a pull request against `development`.
+
+### Test layout
+
+- `src/*.test.ts` — unit tests colocated with the source; `src/*.test-d.ts` — type tests.
+- `tests/fixtures/<framework>/` — real component sources fed to the plugin; they are excluded from ESLint, Prettier and the root `tsconfig.json` on purpose, so do not format them.
+- `tests/frameworks/` — runs `transform` on each fixture and checks the output and the sourcemap positions.
+- `tests/integration/` — a real `vite.build()` (and Astro `build()`) per framework, run with `pnpm test:integration`.
+- `tests/packaging/` — checks the shape of `dist/`; `tests/property/` — fast-check property tests (removal, ranges, sourcemaps); `tests/performance/` — linear-time property checks, run with `pnpm test:performance`.
+
+As a rule of thumb, a parser change gets a unit case in `src/utilities.test.ts`, a fixture case in every framework it affects, and a property or performance case when it touches scanning.
 
 ## Commit Conventions
 
@@ -82,14 +100,18 @@ Optionally, you can use `pnpm commit` to launch the interactive Commitizen promp
 
 [Lefthook](https://github.com/evilmartians/lefthook) git hooks run automatically on each commit, but you can also run these tools manually:
 
-| Tool                 | Command                                                    | Purpose                                     |
-| -------------------- | ---------------------------------------------------------- | ------------------------------------------- |
-| ESLint               | `pnpm lint:fix`                                            | Lint and auto-fix TypeScript and JavaScript |
-| Prettier             | `pnpm format`                                              | Format all files                            |
-| markdownlint         | `pnpm markdownlint:fix`                                    | Lint and auto-fix Markdown                  |
-| TypeScript           | `pnpm type-check`                                          | Type-check the codebase                     |
-| Vitest               | `pnpm test` (also `pnpm test:watch`, `pnpm test:coverage`) | Run the test suite                          |
-| **All of the above** | `pnpm clean-code`                                          | Run Prettier, ESLint, then markdownlint     |
+| Tool | Command | Purpose |
+| -------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| ESLint               | `pnpm lint:fix`                      | Lint and auto-fix TypeScript and JavaScript                               |
+| Prettier             | `pnpm format`                        | Format all files                                                          |
+| markdownlint         | `pnpm markdownlint:fix`              | Lint and auto-fix Markdown                                                |
+| TypeScript           | `pnpm type-check`                    | Type-check the codebase                                                   |
+| Vitest               | `pnpm test` (also `pnpm test:watch`) | Run the `unit` and `performance` projects                                 |
+| Vitest (performance) | `pnpm test:performance`              | Run the `performance` project: linear-time property checks                |
+| Vitest (coverage)    | `pnpm test:coverage`                 | Run the `unit` project with coverage; enforces the 100 % threshold        |
+| Vitest (integration) | `pnpm test:integration`              | Run the `integration` project: a real `vite build` per framework (slower) |
+| Package check        | `pnpm package`                       | Build, then validate `dist/` with `publint` and `arethetypeswrong`        |
+| **All of the above** | `pnpm clean-code`                    | Run Prettier, ESLint, then markdownlint                                   |
 
 ### Secret Scanning (optional)
 

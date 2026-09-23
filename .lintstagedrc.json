@@ -1,6 +1,6 @@
 {
-  "!(*.fixture).{ts,js,mjs,cjs}": ["pnpm lint:staged:fix", "pnpm format:staged"],
-  "!(*.fixture).{json,jsonc}": ["pnpm format:staged"],
-  "!(*.fixture).md": ["pnpm markdownlint:staged:fix"],
-  "!(*.fixture).{yaml,yml}": ["pnpm format:staged"]
+  "*.{ts,js,mjs,cjs}": ["pnpm lint:staged:fix", "pnpm format:staged"],
+  "*.{json,jsonc}": ["pnpm format:staged"],
+  "*.md": ["pnpm markdownlint:staged:fix"],
+  "*.{yaml,yml}": ["pnpm format:staged"]
 }
