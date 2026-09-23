@@ -13,6 +13,16 @@ interface SourceMap {
 
 const BASE64_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 const WORD_CHARACTER_REGEX = /\w/;
+const ASCII_LIMIT = 128;
+const NEWLINE_CODE = 10;
+
+/**
+ * `1` for each ASCII character code `WORD_CHARACTER_REGEX` matches, which is the definition of a word character
+ * magic-string's `hires: 'boundary'` mode uses; every code outside ASCII is a non-word character
+ */
+const WORD_CHARACTER_TABLE = Uint8Array.from({ length: ASCII_LIMIT }, (_, code) =>
+	WORD_CHARACTER_REGEX.test(String.fromCharCode(code)) ? 1 : 0,
+);
 
 /**
  * Encodes a single integer value as a base64 VLQ (Variable Length Quantity) string.
@@ -47,6 +57,10 @@ function encodeVlq(value: number): string {
 	return output;
 }
 
+function isWordCharacter(code: number): boolean {
+	return code < ASCII_LIMIT && WORD_CHARACTER_TABLE[code] === 1;
+}
+
 /**
  * Builds the `mappings` string one generated line at a time, encoding every segment as deltas from the previous one
  */
@@ -56,31 +70,21 @@ class MappingsWriter {
 	#lastGeneratedColumn = 0;
 	#lastOriginalLine = 0;
 	#lastOriginalColumn = 0;
-	#lastMappedColumn = -1;
 
 	addSegment(generatedColumn: number, originalLine: number, originalColumn: number): void {
-		// Two candidates for the same generated column always describe the same original position
-		if (generatedColumn === this.#lastMappedColumn) {
-			return;
-		}
-
+		// The source index delta is always `A` (zero): the map names a single source
 		this.#segments.push(
-			encodeVlq(generatedColumn - this.#lastGeneratedColumn) +
-				encodeVlq(0) +
-				encodeVlq(originalLine - this.#lastOriginalLine) +
-				encodeVlq(originalColumn - this.#lastOriginalColumn),
+			`${encodeVlq(generatedColumn - this.#lastGeneratedColumn)}A${encodeVlq(originalLine - this.#lastOriginalLine)}${encodeVlq(originalColumn - this.#lastOriginalColumn)}`,
 		);
 		this.#lastGeneratedColumn = generatedColumn;
 		this.#lastOriginalLine = originalLine;
 		this.#lastOriginalColumn = originalColumn;
-		this.#lastMappedColumn = generatedColumn;
 	}
 
 	endLine(): void {
 		this.#lines.push(this.#segments.join(','));
 		this.#segments = [];
 		this.#lastGeneratedColumn = 0;
-		this.#lastMappedColumn = -1;
 	}
 
 	toString(): string {
@@ -93,8 +97,10 @@ class MappingsWriter {
 /**
  * Generates a source map for a given `source` string with the specified ranges removed.
  *
- * Emits a segment at the start of each generated line, at each position where the original text was cut, and at
- * every word boundary in between, allowing consumers to resolve any token to its original line and column.
+ * The kept text is described the way magic-string's `hires: 'boundary'` mode describes it: every non-word character
+ * carries a segment of its own, and a run of word characters (`\w`) carries one segment at its first character. A run
+ * is cut at each line start and at each removed range, so that the first character following a removal always
+ * resolves to its true original position.
  *
  * @param source - The original source code string.
  * @param ranges - Sorted, non-overlapping `[start, end)` character ranges to be removed.
@@ -108,7 +114,6 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 	let generatedColumn = 0;
 	let originalLine = 0;
 	let originalColumn = 0;
-	let previousCharacter = '';
 	let cursor = 0;
 
 	/**
@@ -120,7 +125,7 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 	 */
 	function advanceOriginal(from: number, to: number): void {
 		for (let index = from; index < to; index++) {
-			if (source.charAt(index) === '\n') {
+			if (source.charCodeAt(index) === NEWLINE_CODE) {
 				originalLine++;
 				originalColumn = 0;
 			} else {
@@ -133,42 +138,43 @@ function generateRemovalSourceMap(source: string, ranges: Range[], file: string)
 	 * Emits source map segments for the kept region from `from` to `to`.
 	 *
 	 * @remarks
-	 * A segment is written at every new line and at every word boundary change (as determined by
-	 * `WORD_CHARACTER_REGEX`), so tools consuming the source map can resolve the original location of any token in
-	 * the generated content. The `generatedColumn`, `originalLine` and `originalColumn` counters are advanced as the
-	 * region is traversed, and `needsSegment` forces a segment right after a cut.
+	 * A segment is written at every non-word character and at the first character of every word, so tools consuming
+	 * the source map can resolve the original location of any token in the generated content. The `generatedColumn`,
+	 * `originalLine` and `originalColumn` counters are advanced as the region is traversed.
 	 *
 	 * @param from - Start index of the kept region.
 	 * @param to - End index of the kept region.
 	 */
 	function writeKept(from: number, to: number): void {
-		let needsSegment = from < to;
+		// Starts `false` so that the first character of the region, which follows a cut, always opens a segment
+		let isInWord = false;
 
 		for (let index = from; index < to; index++) {
-			const CHARACTER = source.charAt(index);
+			const CODE = source.charCodeAt(index);
 
-			if (CHARACTER === '\n') {
+			if (CODE === NEWLINE_CODE) {
 				WRITER.endLine();
 				generatedColumn = 0;
 				originalLine++;
 				originalColumn = 0;
-				needsSegment = true;
-			} else {
-				if (needsSegment || WORD_CHARACTER_REGEX.test(CHARACTER) !== WORD_CHARACTER_REGEX.test(previousCharacter)) {
-					WRITER.addSegment(generatedColumn, originalLine, originalColumn);
-					needsSegment = false;
-				}
-
-				generatedColumn++;
-				originalColumn++;
+				isInWord = false;
+				continue;
 			}
 
-			previousCharacter = CHARACTER;
+			const IS_WORD_CHARACTER = isWordCharacter(CODE);
+
+			if (!IS_WORD_CHARACTER || !isInWord) {
+				WRITER.addSegment(generatedColumn, originalLine, originalColumn);
+			}
+
+			isInWord = IS_WORD_CHARACTER;
+			generatedColumn++;
+			originalColumn++;
 		}
 	}
 
 	// Emit the kept text before each removed range, then advance the original position through the removed
-	// content; whatever follows the last range is emitted afterwards
+	// content; whatever follows the last range is emitted afterward
 	for (const [start, end] of ranges) {
 		writeKept(cursor, start);
 		advanceOriginal(start, end);

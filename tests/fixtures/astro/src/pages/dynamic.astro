@@ -1,0 +1,31 @@
+---
+import Forward from '../components/Forward.astro';
+
+const id = 'dynamic';
+const items = ['a', 'b'];
+const isActive = true;
+const props = { 'data-testid': 'keep-spread', title: 'spread-title' };
+const markup = '<b data-testid="keep-string">string</b>';
+---
+
+<html lang="en">
+	<head>
+		<title>Astro dynamic attributes</title>
+	</head>
+	<body data-testid={`body-${id}`} class="dynamic-page">
+		<p data-testid={id} class="dynamic">dynamic</p>
+		<p data-TestId={isActive ? 'on' : 'off'} title={id}>ternary</p>
+		<ul>{items.map((item) => <li data-testid={`item-${item}`} class="item">{item}</li>)}</ul>
+		<Forward data-testid={`forward-${id}`} class="forwarded" />
+		<my-element data-testid="custom" class="custom">custom</my-element>
+		<svg data-testid={id} viewBox="0 0 1 1"><path data-testid="path" d="M0 0" /></svg>
+		<p {...props} class="spread">spread</p>
+		<div set:html={markup} data-testid={id} class="raw" />
+		<script is:inline data-testid={id} class="inline">
+			const hint = '<i data-testid="keep-inline">';
+		</script>
+		<script define:vars={{ id }} data-testid={id}>
+			document.body.dataset.ready = id;
+		</script>
+	</body>
+</html>
