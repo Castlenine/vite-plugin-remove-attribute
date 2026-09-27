@@ -276,7 +276,7 @@ const CONFIGURATION = defineConfig(
 
 	// ─── Override: Config Files ───────────────────────────────────────────────────
 	{
-		files: ['*.config.ts', '*.config.js', '.commitlintrc.ts'],
+		files: ['*.config.ts', '*.config.js', '.commitlintrc.ts', '.ncurc.js'],
 		rules: {
 			'@typescript-eslint/naming-convention': 'off', // Config files must match external tool schemas (Vite, ESLint, commitlint) which use their own naming
 		},
