@@ -37,6 +37,7 @@ Vite plugin that removes specified attributes, such as 'data-testid' used in tes
   - [SvelteKit](#sveltekit-example-1-removing-data-testid-attributes-from-svelte-files)
   - [Vue.js](#vuejs-example-removing-data-testid-attributes-from-vue-files)
   - [CommonJS](#commonjs)
+- [How it works](#how-it-works)
 - [Changelog](#changelog)
 - [Acknowledgment](#acknowledgment)
 - [License](#license)
@@ -58,10 +59,10 @@ Vite plugin that removes specified attributes, such as 'data-testid' used in tes
 
 ## Requirements
 
-| Requirement | Version                     |
-| ----------- | --------------------------- |
-| Node.js     | `>=18.0.0`                  |
-| Vite        | `>=2.0.0` (peer dependency) |
+| Requirement | Version |
+| - | - |
+| Node.js | `>=18.0.0` |
+| Vite | `>=2.0.0` (peer dependency) |
 
 ## Installation
 
@@ -135,14 +136,14 @@ The plugin declares `enforce: 'pre'`. Vite sorts plugins by `enforce` (`pre`, th
 
 Only `attributes` is required.
 
-| Option            | Type                | Default                             | Description                                                      |
-| ----------------- | ------------------- | ----------------------------------- | ---------------------------------------------------------------- |
-| `extensions`      | `readonly string[]` | [`DEFAULT_EXTENSIONS`](#extensions) | File extensions to process, without the dot                      |
-| `attributes`      | `readonly string[]` | —                                   | Attribute names to remove (e.g. `['data-testid']`)               |
-| `ignoreFolders`   | `readonly string[]` | `[]`                                | Folders to skip (e.g. `['src/tests']`)                           |
-| `ignoreFiles`     | `readonly string[]` | `[]`                                | Files to skip (e.g. `['Header.svelte', 'src/lib/Modal.svelte']`) |
-| `ignoreDefaults`  | `boolean`           | `true`                              | Also apply the built-in ignore list                              |
-| `removeInStrings` | `boolean`           | `false`                             | Also remove attributes from markup inside quoted JS strings      |
+| Option | Type | Default | Description |
+| - | - | - | - |
+| `extensions` | `readonly string[]` | [`DEFAULT_EXTENSIONS`](#extensions) | File extensions to process, without the dot |
+| `attributes` | `readonly string[]` | — | Attribute names to remove (e.g. `['data-testid']`) |
+| `ignoreFolders` | `readonly string[]` | `[]` | Folders to skip (e.g. `['src/tests']`) |
+| `ignoreFiles` | `readonly string[]` | `[]` | Files to skip (e.g. `['Header.svelte', 'src/lib/Modal.svelte']`) |
+| `ignoreDefaults` | `boolean` | `true` | Also apply the built-in ignore list |
+| `removeInStrings` | `boolean` | `false` | Also remove attributes from markup inside quoted JS strings |
 
 In `attributes` and `extensions`, entries that are not strings, or are empty or whitespace-only, are dropped. The rest are trimmed and de-duplicated. If either list ends up empty, the plugin logs one `[remove-attributes]` warning per plugin instance through Vite's logger, naming the rejected entries. The build does not fail.
 
@@ -473,6 +474,10 @@ module.exports = defineConfig({
   ],
 });
 ```
+
+## How it works
+
+For the internals (file kinds, how a match is verified, the scan budget, compiled Astro modules, sourcemaps and concurrent builds), see [documentation/how-it-works.md](./documentation/how-it-works.md).
 
 ## Changelog
 
