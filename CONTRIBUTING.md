@@ -6,10 +6,10 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
 
 ## Prerequisites
 
-| Requirement                    | Version         | Notes                                                                                                                                                      |
-| ------------------------------ | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Requirement | Version | Notes |
+| - | - | - |
 | [Node.js](https://nodejs.org/) | v24.15+ or v26+ | Enforced by `devEngines` in `package.json` (`.nvmrc` pins the exact version for `nvm use`); the published plugin itself supports Node `>=18` for consumers |
-| [pnpm](https://pnpm.io/)       | 11.0.0+         | Enforced by `devEngines` in `package.json` — install it yourself, it is not auto-downloaded; use `pnpm install`, never `npm install` or `yarn install`     |
+| [pnpm](https://pnpm.io/) | 11.0.0+ | Enforced by `devEngines` in `package.json` — install it yourself, it is not auto-downloaded; use `pnpm install`, never `npm install` or `yarn install` |
 
 `pnpm-workspace.yaml` sets `minimumReleaseAge` to two days, so `pnpm add` and `pnpm update-packages` resolve to the newest release that is at least that old; a version published more recently will not install until it ages past that window.
 
@@ -76,48 +76,48 @@ Optionally, you can use `pnpm commit` to launch the interactive Commitizen promp
 
 ### Allowed Commit Types
 
-| Type              | Description                                        |
-| ----------------- | -------------------------------------------------- |
-| `BREAKING-CHANGE` | A change that breaks backward compatibility        |
-| `build`           | Modifications to build systems or processes        |
-| `cherry-pick`     | Cherry-picks a specific commit                     |
-| `chore`           | Routine maintenance tasks                          |
-| `ci`              | Updates to CI/CD configuration                     |
-| `comment`         | Modifications or additions to code comments        |
-| `config`          | Modifications to configuration files               |
-| `deps`            | Dependency additions, removals, or updates         |
-| `docs`            | Changes to documentation                           |
-| `feat`            | A new feature or improvement                       |
-| `fix`             | A bug fix or issue resolution                      |
-| `hotfix`          | An urgent fix for a critical production issue      |
-| `merge`           | Merges changes from one branch into another        |
-| `perf`            | Performance optimization                           |
-| `prune`           | Removal of unnecessary files or cleanup            |
-| `refactor`        | Code restructuring without behavior changes        |
-| `revert`          | Rolls back a previous commit                       |
-| `security`        | Security vulnerability fixes or enhancements       |
-| `style`           | Code formatting changes (no logic changes)         |
-| `temp`            | Provisional commit marked for cleanup before merge |
-| `test`            | Adding or improving tests                          |
-| `version`         | Updates project version metadata                   |
-| `wip`             | Work in progress                                   |
+| Type | Description |
+| - | - |
+| `BREAKING-CHANGE` | A change that breaks backward compatibility |
+| `build` | Modifications to build systems or processes |
+| `cherry-pick` | Cherry-picks a specific commit |
+| `chore` | Routine maintenance tasks |
+| `ci` | Updates to CI/CD configuration |
+| `comment` | Modifications or additions to code comments |
+| `config` | Modifications to configuration files |
+| `deps` | Dependency additions, removals, or updates |
+| `docs` | Changes to documentation |
+| `feat` | A new feature or improvement |
+| `fix` | A bug fix or issue resolution |
+| `hotfix` | An urgent fix for a critical production issue |
+| `merge` | Merges changes from one branch into another |
+| `perf` | Performance optimization |
+| `prune` | Removal of unnecessary files or cleanup |
+| `refactor` | Code restructuring without behavior changes |
+| `revert` | Rolls back a previous commit |
+| `security` | Security vulnerability fixes or enhancements |
+| `style` | Code formatting changes (no logic changes) |
+| `temp` | Provisional commit marked for cleanup before merge |
+| `test` | Adding or improving tests |
+| `version` | Updates project version metadata |
+| `wip` | Work in progress |
 
 ## Code Quality
 
 [Lefthook](https://github.com/evilmartians/lefthook) git hooks run automatically on each commit, but you can also run these tools manually:
 
 | Tool | Command | Purpose |
-| -------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
-| ESLint               | `pnpm lint:fix`                      | Lint and auto-fix TypeScript and JavaScript                               |
-| Prettier             | `pnpm format`                        | Format all files                                                          |
-| markdownlint         | `pnpm markdownlint:fix`              | Lint and auto-fix Markdown                                                |
-| TypeScript           | `pnpm type-check`                    | Type-check the codebase                                                   |
-| Vitest               | `pnpm test` (also `pnpm test:watch`) | Run the `unit` and `performance` projects                                 |
-| Vitest (performance) | `pnpm test:performance`              | Run the `performance` project: linear-time property checks                |
-| Vitest (coverage)    | `pnpm test:coverage`                 | Run the `unit` project with coverage; enforces the 100 % threshold        |
-| Vitest (integration) | `pnpm test:integration`              | Run the `integration` project: a real `vite build` per framework (slower) |
-| Package check        | `pnpm package`                       | Build, then validate `dist/` with `publint` and `arethetypeswrong`        |
-| **All of the above** | `pnpm clean-code`                    | Run Prettier, ESLint, then markdownlint                                   |
+| - | - | - |
+| ESLint | `pnpm lint:fix` | Lint and auto-fix TypeScript and JavaScript |
+| Prettier | `pnpm format` | Format all files |
+| markdownlint | `pnpm markdownlint:fix` | Lint and auto-fix Markdown |
+| TypeScript | `pnpm type-check` | Type-check the codebase |
+| Vitest | `pnpm test` (also `pnpm test:watch`) | Run the `unit` and `performance` projects |
+| Vitest (performance) | `pnpm test:performance` | Run the `performance` project: linear-time property checks |
+| Vitest (coverage) | `pnpm test:coverage` | Run the `unit` project with coverage; enforces the 100 % threshold |
+| Vitest (integration) | `pnpm test:integration` | Run the `integration` project: a real `vite build` per framework (slower) |
+| Package check | `pnpm package` | Build, then validate `dist/` with `publint` and `arethetypeswrong` |
+| **All of the above** | `pnpm clean-code` | Run Prettier, ESLint, then markdownlint |
 
 ### Secret Scanning (optional)
 
