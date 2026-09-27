@@ -37,6 +37,7 @@ Vite plugin that removes specified attributes, such as 'data-testid' used in tes
   - [SvelteKit](#sveltekit-example-1-removing-data-testid-attributes-from-svelte-files)
   - [Vue.js](#vuejs-example-removing-data-testid-attributes-from-vue-files)
   - [CommonJS](#commonjs)
+- [How it works](#how-it-works)
 - [Changelog](#changelog)
 - [Acknowledgment](#acknowledgment)
 - [License](#license)
@@ -473,6 +474,10 @@ module.exports = defineConfig({
   ],
 });
 ```
+
+## How it works
+
+For the internals (file kinds, how a match is verified, the scan budget, compiled Astro modules, sourcemaps and concurrent builds), see [documentation/how-it-works.md](./documentation/how-it-works.md).
 
 ## Changelog
 

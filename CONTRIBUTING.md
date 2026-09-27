@@ -44,6 +44,12 @@ Whether you are reporting a bug, suggesting a feature, or submitting a pull requ
    pnpm test:integration
    ```
 
+## How the Plugin Works
+
+Read [documentation/how-it-works.md](documentation/how-it-works.md) before changing the transform. It covers file kinds, how a match is verified and bounded, the scan budget, compiled Astro modules, ignore matching, warnings, sourcemaps and concurrent builds.
+
+If your change alters behavior, update that page and the [README](README.md) in the same pull request.
+
 ## Development Workflow
 
 1. Create a branch from `development`.
