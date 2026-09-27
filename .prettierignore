@@ -14,6 +14,9 @@ node_modules/
 /.vitest-attachments/
 /.vitest/
 
+# Test fixtures (framework components exercised as data, not formatted as source)
+tests/fixtures/
+
 # Logs
 *-debug.log
 *.log

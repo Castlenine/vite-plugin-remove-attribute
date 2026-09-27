@@ -25,6 +25,8 @@
 - [ ] `style` — Code formatting changes (no logic changes)
 - [ ] `test` — Adding or improving tests
 
+This list covers the common types — see the full [Allowed Commit Types](../CONTRIBUTING.md#allowed-commit-types) table in `CONTRIBUTING.md` for the rest.
+
 ## Checklist
 
 - [ ] PR title follows [Conventional Commits](https://www.conventionalcommits.org/) format (e.g., `feat: support attribute values with template literals`)
@@ -32,6 +34,7 @@
 - [ ] `pnpm clean-code` passes (Prettier, ESLint, markdownlint)
 - [ ] `pnpm type-check` passes
 - [ ] `pnpm test` passes (tests added or updated when behavior changes)
+- [ ] `pnpm test:integration` passes when transform behavior or a test fixture changed
 - [ ] `pnpm build` succeeds
 - [ ] Breaking changes are documented (if applicable)
 

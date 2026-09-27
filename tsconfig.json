@@ -4,7 +4,9 @@
     "moduleResolution": "bundler",
     "module": "ESNext",
     "moduleDetection": "force" /* Treat every file as a module, so two root scripts declaring the same top-level name never collide with "cannot redeclare block-scoped variable" */,
-    "lib": ["ESNext"] /* The plugin runs inside the Vite (Node) process; no DOM types are needed */,
+    "lib": [
+      "ES2022"
+    ] /* The plugin runs inside the Vite (Node >= 18) process; no DOM types are needed, and nothing newer than ES2022 may be used without a Node 18 guard */,
     "target": "ES2022" /* Matches `build.target` in vite.config.ts; ES2022 is the newest target Node 18 (engines.node) runs natively */,
     "allowImportingTsExtensions": true /* Allow `.ts` import specifiers, required by Vite's native config loader (Node strips types and resolves the literal path). Safe because `noEmit` is on */,
     "allowJs": true /* Permit importing JavaScript files alongside TypeScript */,
@@ -27,12 +29,21 @@
     "verbatimModuleSyntax": true /* Require explicit `import type` and `export type` for type-only bindings */,
     "types": ["node", "vitest/globals"] /* `vitest/globals` backs `test.globals: true` in vite.config.ts */
   },
-  "include": ["./src/**/*.js", "./src/**/*.ts", "./src/**/*.d.ts", "./*.ts", "./.commitlintrc.ts"],
+  "include": [
+    "./src/**/*.js",
+    "./src/**/*.ts",
+    "./src/**/*.d.ts",
+    "./*.ts",
+    "./.commitlintrc.ts",
+    "./.ncurc.js",
+    "./tests/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "dist",
     "coverage",
     "test-results-vitest",
+    "tests/fixtures" /* Framework fixtures compile under their own framework, not under this library config */,
     "*.backup",
     "*.backup.*",
     "*.bak",

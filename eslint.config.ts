@@ -24,6 +24,8 @@ const CONFIGURATION = defineConfig(
 			'test-results-vitest/',
 			'.vitest-attachments/',
 			'.vitest/',
+			// Test fixtures (framework components exercised as data, not linted as source)
+			'tests/fixtures/**',
 			// Logs
 			'*-debug.log',
 			'*.log',

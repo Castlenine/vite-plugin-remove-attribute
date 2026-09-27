@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title data-testid="title" class="page-title">HTML fixture</title>
+	</head>
+	<body data-testid="body" data-cy="body-cy" class="page">
+		<!-- a <b data-testid="comment"> written inside a comment is kept — a comment holds no tag -->
+		<div data-testid="wrapper" class="container" id="app">
+			<input data-testid=unquoted-value class="field" />
+			<button data-testid class="btn">bare</button>
+			<p data-testid="quoted value" class="text">quoted</p>
+			<p data-testid="${price}" class="dollar">dollar</p>
+			<p data-testid="${" title="}" class="spanned-title">spanned title</p>
+		</div>
+		<script type="module">
+			const name = 'data-testid';
+			const html = String.raw;
+			console.log(name);
+			document.body.insertAdjacentHTML('beforeend', `<b data-testid="${name}" class="inline-markup">inline</b>`);
+			document.body.insertAdjacentHTML(
+				'beforeend',
+				html`<b data-testid="${name.length > 0 ? `lit-${name.length}` : "lit-empty"}" class="lit-markup">lit</b>`,
+			);
+		</script>
+		<script type="module" src="./main.ts"></script>
+	</body>
+</html>

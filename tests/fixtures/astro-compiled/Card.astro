@@ -1,0 +1,5 @@
+---
+const { title, ...rest } = Astro.props;
+---
+
+<div {...rest} class="card"><h2 data-testid={`card-${title}`}>{title}</h2></div>

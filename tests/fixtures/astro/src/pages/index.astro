@@ -1,0 +1,45 @@
+---
+import Card from '../components/Card.astro';
+
+const items = ['a', 'b'];
+const price = 5;
+const label = `cost ${price > 0 ? "paid" : "free"}`;
+const html = String.raw;
+const badge = html`<b data-testid="${price > 0 ? `badge-${price}` : "badge-free"}" class="badge">badge</b>`;
+---
+
+<html lang="en">
+	<head>
+		<title>Astro fixture</title>
+	</head>
+	<body data-testid="body" data-cy="body-cy" class="page">
+		<main data-testid="main" class="main">
+			<Card title="hello" client:load data-testid="hello-card" class="hello-card" />
+			<ul>
+				{items.map((item) => <li data-testid={`item-${item}`} class="item">{item}</li>)}
+			</ul>
+			<div set:html="<span>raw</span>" data-testid="raw-html" class="raw" />
+			<p data-testid="cost ${price}" class="price">{label}</p>
+			<p data-testid="${" title="}" class="spanned-title">spanned title</p>
+			<div set:html={badge} class="badge-host" />
+			<script data-testid="inline-script" class="inline">
+				console.log('astro fixture');
+			</script>
+			<script>
+				const html = String.raw;
+				const isReady = document.readyState !== 'loading';
+
+				document.body.insertAdjacentHTML(
+					'beforeend',
+					html`<b data-testid="${isReady ? `ready-${document.title}` : "waiting"}" class="script-badge">script</b>`,
+				);
+			</script>
+		</main>
+	</body>
+</html>
+
+<style>
+	.page {
+		color: navy;
+	}
+</style>

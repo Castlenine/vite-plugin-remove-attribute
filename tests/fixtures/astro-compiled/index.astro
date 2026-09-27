@@ -1,0 +1,29 @@
+---
+import Card from '../components/Card.astro';
+
+const id = 'dynamic';
+const props = { 'data-testid': 'spread', title: 'spread-title' };
+const items = ['a', 'b'];
+const isActive = true;
+const markup = '<b data-testid="in-string">';
+---
+
+<main data-testid="static-main" class="main">
+	<p data-testid={id} class="dynamic">dynamic</p>
+	<p data-testid={`template-${id}`} title={id}>template</p>
+	<p data-TestId={isActive ? 'on' : 'off'} class:list={['a', { b: isActive }]}>upper-case ternary</p>
+	<p data-testid={{ a: 1 }.a} data-cy={id}>object</p>
+	<p {...props} class="spread">spread</p>
+	<Card data-testid={id} title="dynamic-card" />
+	<Card data-testid="static-card" title="static-card" />
+	<my-element data-testid={id} class="custom">custom</my-element>
+	<ul>{items.map((item) => <li data-testid={`item-${item}`}>{item}</li>)}</ul>
+	<svg data-testid={id}><path data-testid="path" d="M0" /></svg>
+	<script is:inline data-testid={id} class="inline">
+		const hint = '<i data-testid="inline-body">';
+	</script>
+	<script define:vars={{ id }} data-testid={id}>
+		console.log(id);
+	</script>
+	<p set:html={markup} data-testid={id} />
+</main>
